@@ -88,7 +88,7 @@ html
 		.register-page
 			.form
 				.error-message.hide-message
-					p.error Wrong credentials, please try again
+					p.error Wrong credentials or user already exists
 				form.register-form(onsubmit="submitForm(event)")
 					input(type="text", placeholder="username", name="username")
 					input(type="password", placeholder="password", name="password")

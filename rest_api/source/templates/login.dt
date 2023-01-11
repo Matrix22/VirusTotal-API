@@ -121,7 +121,11 @@ html
 					console.log("Success:", data);
 
 					if (!data.hasOwnProperty('statusMessage')) {
-						document.cookie = "AccessToken=" + data.AccessToken;
+						let d = new Date();
+						d.setTime(d.getTime() + (7*24*60*60*1000));
+						let expires = "expires="+ d.toUTCString();
+
+						document.cookie = "AccessToken=" + data.AccessToken + ";" + expires + ";path=/";
 
 						let element = document.querySelector(".error-message");
 

@@ -22,7 +22,8 @@ void main() {
     router.get("/home", &homeHandler);
     router.get("/home/file", &fileHandler);
     router.get("/home/url", &urlHandler);
-    
+    router.get("/home/logout", &logoutHandler);
+
     auto listener = listenHTTP(settings, router);
     
     scope (exit) {
@@ -34,15 +35,45 @@ void main() {
 }
 
 void landingHandler(HTTPServerRequest req, HTTPServerResponse res) {
-    render!("landing.dt")(res);
+    if (req.cookies().length) {
+        auto accessToken = req.cookies().get("AccessToken");
+
+        if (accessToken.empty) {
+            render!("landing.dt")(res);
+        } else {
+            res.redirect("/home");
+        }
+    } else {
+        render!("landing.dt")(res);
+    }
 }
 
 void loginHandler(HTTPServerRequest req, HTTPServerResponse res) {
-    render!("login.dt")(res);
+    if (req.cookies().length) {
+        auto accessToken = req.cookies().get("AccessToken");
+
+        if (accessToken.empty) {
+            render!("login.dt")(res);
+        } else {
+            res.redirect("/home");
+        }
+    } else {
+        render!("login.dt")(res);
+    }
 }
 
 void registerHandler(HTTPServerRequest req, HTTPServerResponse res) {
-    render!("register.dt")(res);
+    if (req.cookies().length) {
+        auto accessToken = req.cookies().get("AccessToken");
+
+        if (accessToken.empty) {
+            render!("register.dt")(res);
+        } else {
+            res.redirect("/home");
+        }
+    } else {
+        render!("register.dt")(res);
+    }
 }
 
 void homeHandler(HTTPServerRequest req, HTTPServerResponse res) {
@@ -60,9 +91,44 @@ void homeHandler(HTTPServerRequest req, HTTPServerResponse res) {
 }
 
 void fileHandler(HTTPServerRequest req, HTTPServerResponse res) {
-    render!("file.dt")(res);
+    if (req.cookies().length) {
+        auto accessToken = req.cookies().get("AccessToken");
+
+        if (accessToken.empty) {
+            res.redirect("/login");
+        } else {
+            render!("file.dt")(res);
+        }
+    } else {
+        res.redirect("/login");
+    }
 }
 
 void urlHandler(HTTPServerRequest req, HTTPServerResponse res) {
-    render!("url.dt")(res);
+    if (req.cookies().length) {
+        auto accessToken = req.cookies().get("AccessToken");
+
+        if (accessToken.empty) {
+            res.redirect("/login");
+        } else {
+            render!("url.dt")(res);
+        }
+    } else {
+        res.redirect("/login");
+    }
+}
+
+void logoutHandler(HTTPServerRequest req, HTTPServerResponse res) {
+    if (req.cookies().length) {
+        auto accessToken = req.cookies().get("AccessToken");
+
+        if (accessToken.empty) {
+            res.redirect("/");
+        } else {
+            res.setCookie("AccessToken", null);
+            res.redirect("/");
+        }
+    } else {
+        res.redirect("/");
+    }
 }
