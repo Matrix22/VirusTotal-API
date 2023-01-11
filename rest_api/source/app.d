@@ -46,7 +46,17 @@ void registerHandler(HTTPServerRequest req, HTTPServerResponse res) {
 }
 
 void homeHandler(HTTPServerRequest req, HTTPServerResponse res) {
-    render!("home.dt")(res);
+    if (req.cookies().length) {
+        auto accessToken = req.cookies().get("AccessToken");
+
+        if (accessToken.empty) {
+            res.redirect("/login");
+        } else {
+            render!("home.dt")(res);
+        }
+    } else {
+        res.redirect("/login");
+    }
 }
 
 void fileHandler(HTTPServerRequest req, HTTPServerResponse res) {

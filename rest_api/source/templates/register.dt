@@ -1,6 +1,147 @@
 doctype html
 html
 	head
-		title Hello, World Again
+		title Register
+
+		:css
+			@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+			.register-page {
+				width: 500px;
+				padding: 12% 0 0;
+				margin: auto;
+			}
+
+			.form {
+				position: relative;
+				z-index: 1;
+				background: #FFFFFF;
+				max-width: 360px;
+				margin: 0 auto 100px;
+				padding: 45px;
+				text-align: center;
+				box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+			}
+
+			.form input {
+				font-family: "Roboto", sans-serif;
+				outline: 0;
+				background: #f2f2f2;
+				width: 100%;
+				border: 0;
+				margin: 0 0 15px;
+				padding: 15px;
+				box-sizing: border-box;
+				font-size: 14px;
+			}
+
+			.form button {
+				font-family: "Roboto", sans-serif;
+				text-transform: uppercase;
+				outline: 0;
+				background: #2B7A78;
+				width: 100%;
+				border: 0;
+				padding: 15px;
+				color: #FFFFFF;
+				font-size: 14px;
+				-webkit-transition: all 0.3 ease;
+				transition: all 0.3 ease;
+				cursor: pointer;
+			}
+			
+			.form button:hover,.form button:active,.form button:focus {
+				background: #43A047;
+			}
+			
+			.form .message {
+				margin: 15px 0 0;
+				color: #b3b3b3;
+				font-size: 14px;
+			}
+			
+			.form .message a {
+				color: #2B7A78;
+				text-decoration: none;
+			}
+
+			body {
+				background: #2B7A78;
+				font-family: "Roboto", sans-serif;
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;      
+			}
+
+			.error-message {
+				padding-bottom: 20px;
+			}
+
+			.hide-message {
+				display: none;
+			}
+
+			.error {
+				color: red;
+				font-size: 14px;
+			}
 	body
-		p Suntem aici
+		.register-page
+			.form
+				.error-message.hide-message
+					p.error Wrong credentials, please try again
+				form.register-form(onsubmit="submitForm(event)")
+					input(type="text", placeholder="username", name="username")
+					input(type="password", placeholder="password", name="password")
+					input(type="email", placeholder="email address", name="userEmail")
+					button(type="submit") Sign Up
+					p.message Already registered? 
+						a(href="/login") Login
+
+		:javascript
+			function submitForm(event) {
+				event.preventDefault();
+				const url = "http://localhost:8080/api/v1/signup";
+				const formData = new FormData(event.target);
+				const data = {};
+				formData.forEach((value, key) => (data[key] = value));
+				console.log(data);
+				fetch(url, {
+					method: "POST",
+					body: JSON.stringify(data),
+					headers: {
+						"Content-Type": "application/json",
+					},
+				})
+				.then((response) => {
+					if (!response.ok) {
+						throw Error(response.statusText);
+					}
+
+					return response.json();
+				})
+				.then((data) => {
+					console.log("Success:", data);
+
+					if (!data.hasOwnProperty('statusMessage')) {
+
+						let element = document.querySelector(".error-message");
+
+						if (!element.classList.contains("hide-message")) {
+							element.classList.add("hide-message");
+						}
+
+						window.location.replace("/login");
+					} else {
+						throw Error(data.statusMessage);
+					}
+				})
+				.catch((error) => {
+					console.error("Server error:", error);
+
+					let errorElement = document.querySelector(".error-message");
+					
+					if (errorElement.classList.contains("hide-message")) {
+						errorElement.classList.remove("hide-message");
+					}
+				});
+			}

@@ -173,7 +173,7 @@ html(lang="en")
 				right: 0;
 			}
 
-			.sign-btn {
+			.sign-up-btn {
 				position: absolute;
 				left: 62%;
 				transform: translate(-50%, 0);
@@ -189,6 +189,7 @@ html(lang="en")
 				font-size: 16px;
 				cursor: pointer;
 				transition: all 300ms ease-in-out;
+				background-color: #FEFFFF;
 			}
 
 			.login-btn {
@@ -207,31 +208,19 @@ html(lang="en")
 				font-size: 16px;
 				cursor: pointer;
 				transition: all 300ms ease-in-out;
+				background-color: #FEFFFF;
 			}
 
-			a {
-				text-decoration: none;
-				color: #2B7A78;
-			}
-
-			.sign-btn:hover {
+			.sign-up-btn:hover {
 				background-color: #2B7A78;
 				color: #fff;
 				cursor: pointer;
-			}
-
-			.sign-btn:hover a {
-				color: #fff;
 			}
 
 			.login-btn:hover {
 				background-color: #2B7A78;
 				color: #fff;
 				cursor: pointer;
-			}
-
-			.login-btn:hover a {
-				color: #fff;
 			}
 
 			@media (max-height: 600px) and (min-width: 600px) {
@@ -268,7 +257,7 @@ html(lang="en")
 					display: none;
 				}
 
-				.sign-btn {
+				.sign-up-btn {
 					margin-top: 30px;
 					width: 100px;
 					height: 20px;
@@ -292,14 +281,22 @@ html(lang="en")
 					.contact World without malware
 				.logo-container
 					.logo
-						img(src="/templates/images/logo.png")	
+						img(src="https://i.postimg.cc/JhJrp4zV/logo-no-background.png", width="500px", height="82px")
 			.right-container
 				.start-container
 					.start-title Check your files and urls<br>for malware
 					.project-container
 						.tell-us-more Try our new features by subscribing
-					.login-btn
-						a(href="/login") Log In
-					.sign-btn
-						a(href="/register") Sign Up
+					button#log-btn.login-btn Log In
+					button#sign-btn.sign-up-btn Sign Up
+
+					:javascript
+						document.getElementById("log-btn").onclick = function () {
+							location.href = "/login";
+						};
+
+						document.getElementById("sign-btn").onclick = function () {
+							location.href = "/register";
+						};
+
 		
