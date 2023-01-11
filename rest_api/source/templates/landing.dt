@@ -290,13 +290,13 @@ html(lang="en")
 					button#log-btn.login-btn Log In
 					button#sign-btn.sign-up-btn Sign Up
 
-					:javascript
-						document.getElementById("log-btn").onclick = function () {
-							location.href = "/login";
-						};
+		:javascript
+			document.getElementById("log-btn").onclick = function () {
+				location.href = "/login";
+			};
 
-						document.getElementById("sign-btn").onclick = function () {
-							location.href = "/register";
-						};
+			document.getElementById("sign-btn").onclick = function () {
+				location.href = "/register";
+			};
 
 		

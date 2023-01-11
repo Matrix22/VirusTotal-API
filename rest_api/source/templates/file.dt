@@ -1,6 +1,381 @@
 doctype html
 html
 	head
-		title Hello, World Again
+		title Virus Analyzer
+
+		:css
+			@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+			body {
+				margin: 0;
+				padding: 0;
+				overflow: hidden;
+			}
+
+			.container {
+				width: 100%;
+				height: 100vh;
+			}
+
+			.left-container {
+				width: 40%;
+				height: 100%;
+				background-color: #3AAFA9;
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+
+			.navigation {
+				width: 80%;
+				height: 50px;
+				position: relative;
+				top: 50px;
+				left: 50%;
+				transform: translate(-50%, 0);
+			}
+
+			.title {
+				color: #FEFFFF;
+				font-family: 'Montserrat', sans-serif;
+				font-size: 32px;
+				text-transform: uppercase;
+				letter-spacing: 2.5px;
+				float: left;
+				line-height: 50px;
+				transition: all 300ms ease-in-out;
+			}
+
+			.contact {
+				color: #FEFFFF;
+				font-family: 'Montserrat', sans-serif;
+				font-size: 16px;
+				float: right;
+				line-height: 50px;
+				position: relative;
+				cursor: pointer;
+				transition: all 300ms ease-in-out;
+			}
+
+			.contact:before {
+				content: "";
+				position: absolute;
+				bottom: 15px;
+				left: 0;
+				width: 0;
+				height: 1px;
+				background-color: #2B7A78;
+				transition: all 300ms ease-in-out;
+			}
+
+			.contact:hover:before {
+				width: 100%;
+			}
+
+			.logo-container {
+				width: 100%;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+			}
+
+			.logo {
+				color: #2B7A78;
+				font-family: 'Montserrat', sans-serif;
+				font-size: 64px;
+				text-transform: uppercase;
+				letter-spacing: 2.5px;
+				text-align: center;
+				transition: all 300ms ease-in-out;
+			}
+
+			.social {
+				width: 80%;
+				position: absolute;
+				bottom: 40px;
+				left: 50%;
+				transform: translate(-50%, 0);
+			}
+
+			.social-btn {
+				display: inline-block;
+				margin-right: 25px;
+			}
+
+			.social-btn .icon {
+				color: #2B7A78;
+				transition: all 300ms ease-in-out;
+				cursor: pointer;
+			}
+
+			.social-title {
+				color: #2B7A78;
+				font-family: 'Montserrat', sans-serif;
+				font-size: 16px;
+				letter-spacing: 1px;
+				margin-top: 10px;
+				transition: all 300ms ease-in-out;
+			}
+
+			.icon:hover {
+				color: #17252A;
+			}
+
+			.right-container {
+				width: 60%;
+				height: 100%;
+				background-color: #FEFFFF;
+				position: absolute;
+				top: 0;
+				right: 0;
+			}
+
+			.nav-parent-container {
+				width: 80%;
+				position: absolute;
+				top: 50px;
+				left: 50%;
+				transform: translate(-50%, 0);
+			}
+
+			.nav-container {
+				position: absolute;
+				top: 0;
+				right: 0;
+			}
+
+			.nav-container .input {
+				position: relative;
+				display: inline-block;
+				margin-left: 25px;
+				line-height: 50px;
+				cursor: pointer;
+				transition: all 300ms ease-in-out;
+			}
+
+			.nav-container input {
+				outline: none;
+				border: none;
+				background-color: transparent;
+				cursor: pointer;
+				transition: all 300ms ease-in-out;
+			}
+
+			.nav-container input::placeholder {
+				color: #2B7A78;
+				font-family: 'Montserrat', sans-serif;
+				font-size: 16px;
+				transition: all 300ms ease-in-out;
+			}
+
+			.input:before {
+				content: "";
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				width: 100%;
+				height: 1px;
+				background-color: #2B7A78;
+				transition: all 300ms ease-in-out;
+			}
+
+			.input:hover:before {
+				background-color: #17252A;
+			}
+
+			.nav-btn {
+				float: right;
+				color: #2B7A78;
+				font-family: 'Montserrat', sans-serif;
+				font-size: 16px;
+				border: 1px solid #2B7A78;
+				width: 150px;
+				height: 50px;
+				border-radius: 50px;
+				text-align: center;
+				line-height: 50px;
+				margin-left: 50px;
+				cursor: pointer;
+				transition: all 300ms ease-in-out;
+				background-color: #FEFFFF;
+			}
+
+			.nav-btn:hover {
+				color: #fff;
+				background-color: #2B7A78;
+			}
+
+			.nav-btn.file {
+				color: #fff;
+				background-color: #2B7A78;
+			}
+
+			.start-container {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				width: 75%;
+				transition: all 300ms ease-in-out;
+			}
+
+			.start-title {
+				color: #2B7A78;
+				font-family: 'Montserrat', sans-serif;
+				font-size: 32px;
+				text-transform: uppercase;
+				letter-spacing: 2.5px;
+				text-align: center;
+				transition: all 300ms ease-in-out;
+			}
+
+			.project-container {
+				width: 100%;
+				position: absolute;
+				left: 50%;
+				margin-top: 5px;
+				transform: translate(-50%, 0);
+				width: 50%;
+			}
+
+			.tell-us-more {
+				color: #2B7A78;
+				font-family: 'Montserrat', sans-serif;
+				font-size: 16px;
+				text-align: center;
+				position: relative;
+				transition: all 300ms ease-in-out;
+			}
+
+			.tell-us-more:before, .tell-us-more:after {
+				content: "";
+				position: absolute;
+				top: 50%;
+				transform: translate(0, -50%);
+				width: 50px;
+				height: 1px;
+				background-color: #2B7A78;
+			}
+
+			.tell-us-more:before {
+				left: 0;
+			}
+
+			.tell-us-more:after {
+				right: 0;
+			}
+
+			.start-btn {
+				position: absolute;
+				left: 50%;
+				transform: translate(-50%, 0);
+				width: 250px;
+				height: 50px;
+				text-align: center;
+				line-height: 50px;
+				margin-top: 50px;
+				border-radius: 50px;
+				border: 1px solid #2B7A78;
+				color: #2B7A78;
+				font-family: 'Montserrat', sans-serif;
+				font-size: 16px;
+				cursor: pointer;
+				transition: all 300ms ease-in-out;
+			}
+
+			.start-btn:hover {
+				background-color: #2B7A78;
+				color: #fff;
+			}
+
+			@media (max-height: 600px) and (min-width: 600px) {
+				.title {
+					font-size: 16px;
+				}
+
+				.contact {
+					font-size: 10px;
+				}
+
+				.logo {
+					font-size: 40px;
+				}
+
+				.icon {
+					font-size: 10px;
+				}
+
+				.social-title {
+					font-size: 10px;
+					margin-top: 0;
+				}
+
+				.nav-container .input {
+					margin-left: 20px;
+					line-height: 20px;
+					height: 20px;
+				}
+
+				.nav-container input {
+					width: 100px;
+				}
+
+				.nav-container input::placeholder {
+					font-size: 8px;
+				}
+
+				.nav-btn {
+					width: 50px;
+					height: 20px;
+					font-size: 10px;
+					line-height: 20px;
+				}
+
+				.start-container {
+					width: 100%;
+				}
+
+				.start-title {
+					font-size: 12px;
+				}
+
+				.tell-us-more {
+					margin-top: -5px;
+					font-size: 10px;
+				}
+
+				.tell-us-more:before, .tell-us-more:after {
+					display: none;
+				}
+			}
 	body
-		p Suntem aici
+		.container
+			.left-container
+				.navigation
+					.title Virus Analyzer
+					.contact World without malware
+				.logo-container
+					.logo
+						img(src="https://i.postimg.cc/JhJrp4zV/logo-no-background.png", width="500px", height="82px")
+			.right-container
+				.nav-parent-container
+					.nav-container
+						button.nav-btn.log-out Log Out
+						button.nav-btn.url URL
+						button.nav-btn.file FILE
+						button.nav-btn.home HOME
+				.start-container
+		
+		:javascript
+			document.querySelector(".nav-btn.log-out").onclick = function() {
+				location.href = "/home/logout";
+			};
+
+			document.querySelector(".nav-btn.url").onclick = function() {
+				location.href = "/home/url";
+			};
+
+			document.querySelector(".nav-btn.home").onclick = function() {
+				location.href = "/home";
+			};
