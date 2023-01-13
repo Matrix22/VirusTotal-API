@@ -213,11 +213,13 @@ html
 
 			.start-container {
 				position: absolute;
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50%);
+				top: 35%;
+				left: 12%;
 				width: 75%;
 				transition: all 300ms ease-in-out;
+				display: flex;
+				align-items: center;
+				justify-content: center;
 			}
 
 			.start-title {
@@ -289,72 +291,98 @@ html
 				color: #fff;
 			}
 
-			@media (max-height: 600px) and (min-width: 600px) {
-				.title {
-					font-size: 16px;
-				}
+			.nav-btn.log-out:hover {
+				color: #fff;
+				background-color: red;
+				border-color: red;
+			}
 
-				.contact {
-					font-size: 10px;
-				}
+			.start-container.container {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				justify-content: center;
+				width: 50%;
+				margin: auto;
+				padding: 20px;
+				background-color: #FEFFFF;
+				box-shadow: 0 0 15px 0 #F5F5F5;
+			}
 
-				.logo {
-					font-size: 40px;
-				}
+			.navbar {
+				display: flex;
+				width: 100%;
+			}
 
-				.icon {
-					font-size: 10px;
-				}
+			.navbar-element {
+				flex: 1;
+				text-align: center;
+				padding: 10px 0;
+				color: #2B7A78;
+				cursor: pointer;
+				border-top: 1px solid #2B7A78;
+				border-bottom: 1px solid #2B7A78;
+				border-right: 1px solid #2B7A78;
+				transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+			}
 
-				.social-title {
-					font-size: 10px;
-					margin-top: 0;
-				}
+			.navbar-element:first-child {
+				border-left: 1px solid #2B7A78;
+			}
 
-				.nav-container .input {
-					margin-left: 20px;
-					line-height: 20px;
-					height: 20px;
-				}
+			.navbar-element:hover {
+				background-color: #2B7A78;
+				color: white;
+			}
 
-				.nav-container input {
-					width: 100px;
-				}
+			.navbar-element.selected {
+				background-color: #2B7A78;
+				color: white;
+			}
 
-				.nav-container input::placeholder {
-					font-size: 8px;
-				}
+			.form-container {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				justify-content: center;
+				width: 100%;
+				margin-top: 20px;
+			}
 
-				.nav-btn {
-					width: 50px;
-					height: 20px;
-					font-size: 10px;
-					line-height: 20px;
-				}
+			.form-container form {
+				width: 100%;
+				display: none;
+			}
 
-				.start-container {
-					width: 100%;
-				}
+			#file-list-container{
+				overflow-y: scroll;
+				max-height: 300px;
+				margin-top:20px;
+			}
 
-				.start-title {
-					font-size: 12px;
-				}
+			#file-list {
+				list-style-type: none;
+				padding: 0;
+				margin: 0;
+			}
 
-				.tell-us-more {
-					margin-top: -5px;
-					font-size: 10px;
-				}
+			#message{
+				margin-bottom:10px;
+			}
 
-				.tell-us-more:before, .tell-us-more:after {
-					display: none;
-				}
+			.spinner-container {
+				display: none;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
 			}
 	body
 		.container
 			.left-container
 				.navigation
 					.title Virus Analyzer
-					.contact World without malware
+					.contact #{userEmail}
 				.logo-container
 					.logo
 						img(src="https://i.postimg.cc/JhJrp4zV/logo-no-background.png", width="500px", height="82px")
@@ -366,6 +394,34 @@ html
 						button.nav-btn.file FILE
 						button.nav-btn.home HOME
 				.start-container
+					.container
+						.navbar
+							#add-file.navbar-element Add File
+							#get-file.navbar-element Get File
+							#get-all-files.navbar-element Get All Files
+							#delete-file.navbar-element Delete File
+						.form-container
+							form#add-file-form(style="display:none;", onsubmit="submitFormAddFile(event)")
+								#message.add
+								input#file-input(type="file")
+								br
+								input#upload-button(type="submit", value="Upload", style="margin-top:20px;")
+							form#get-file-form(style="display:none;", onsubmit="submitFormGetFile(event)")
+								#message.get
+								label(for="file-digest-get") File Digest:
+								input#file-digest-get(type="text", name="file-digest-get", placeholder="File Digest", required)
+								input#upload-button(type="submit", value="Get File", style="margin-top:20px;")
+								.scrollable-div(style="overflow:auto; max-height: 300px;")
+									p#get-file-message
+							form#get-all-files-form
+								#message.get-all
+								#file-list-container
+									ul#file-list
+							form#delete-file-form(style="display:none;", onsubmit="submitFormDeleteFile(event)")
+								#message.delete
+								label(for="file-digest") File Digest:
+								input#file-digest(type="text", name="file-digest", placeholder="File Digest", required)
+								input#upload-button(type="submit", value="Delete", style="margin-top:20px;")
 		
 		:javascript
 			document.querySelector(".nav-btn.log-out").onclick = function() {
@@ -378,4 +434,263 @@ html
 
 			document.querySelector(".nav-btn.home").onclick = function() {
 				location.href = "/home";
+			};
+
+			const navbarElements = document.querySelectorAll('.navbar-element');
+			const forms = document.querySelectorAll('.form-container form');
+
+			navbarElements.forEach(element => {
+				element.addEventListener('click', function() {
+					navbarElements.forEach(el => el.classList.remove('selected'));
+					this.classList.add('selected');
+					const selectedFormId = this.getAttribute('id') + '-form';
+					forms.forEach(form => {
+						if (form.getAttribute('id') === selectedFormId) {
+							form.style.display = 'block';
+						} else {
+							form.style.display = 'none';
+						}
+					});
+				});
+				element.addEventListener('mousedown', function() {
+					this.classList.add('selected');
+					const selectedFormId = this.getAttribute('id') + '-form';
+					forms.forEach(form => {
+						if (form.getAttribute('id') === selectedFormId) {
+							form.style.display = 'block';
+						} else {
+							form.style.display = 'none';
+						}
+					});
+				});
+			});
+
+			navbarElements[0].classList.add('selected');
+			forms[0].style.display = 'block';
+
+			function getCookie(cname) {
+				let name = cname + "=";
+				let decodedCookie = decodeURIComponent(document.cookie);
+				let ca = decodedCookie.split(';');
+
+				for(let i = 0; i <ca.length; i++) {
+					let c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
+				}
+
+				return "";
+			};
+
+			function fetchFiles() {
+				event.preventDefault();
+
+				document.querySelector('#message.add').innerHTML = "";
+				document.querySelector('#message.delete').innerHTML = "";
+				document.querySelector('#message.get').innerHTML = "";
+				document.querySelector('#get-file-message').innerHTML = "";
+				const message = document.querySelector('#message.get-all');
+				const fileList = document.querySelector('#file-list');
+				message.innerHTML = "";
+				fileList.innerHTML = "";
+				
+				const data = {};
+				data["userEmail"] = getCookie("userEmail");
+				
+				const queryString = Object.keys(data).map(key => key + '=' + data[key]).join('&');
+				const url = `http://localhost:8080/api/v1/user_files?${queryString}`;
+
+				fetch(url, {
+					method: "GET",
+				})
+				.then((response) => {
+					if (!response.ok) {
+						throw Error(response.statusText);
+					}
+
+					return response.json();
+				})
+				.then(data => {
+					if(data.length == 0) {
+						message.innerHTML = "No files found";
+						message.style.color = "red";
+					}
+					else {
+						message.innerHTML = "Fetching files: Success";
+						message.style.color = "green";
+
+						for(let i = 0; i < data.length; i++) {
+							const file = data[i];
+							fileList.innerHTML += `<li>File Name: ${file.fileName}</br>Digest: ${file.digest}</br></li>`
+						}
+					}
+				})
+				.catch(err => {
+					message.innerHTML = "Fetching files: Failed";
+					message.style.color = "red";
+				});
+			}
+
+			const getFilesNavbarElement = document.querySelector('#get-all-files');
+			getFilesNavbarElement.addEventListener('click', fetchFiles);
+
+			function submitFormAddFile(event) {
+				event.preventDefault();
+
+				document.querySelector('#message.get-all').innerHTML = "";
+				document.querySelector('#message.delete').innerHTML = "";
+				document.querySelector('#message.get').innerHTML = "";
+				document.querySelector('#get-file-message').innerHTML = "";
+				document.querySelector('#file-list').innerHTML = "";
+
+				const fileInput = document.querySelector('#file-input');
+				const file = fileInput.files[0];
+				const message = document.querySelector('#message.add');
+
+				if (!file) {
+					message.innerHTML = "No file selected";
+					message.style.color = "red";
+					return;
+				}
+
+				const fileName = file.name;
+				const fileReader = new FileReader();
+
+				fileReader.onload = function() {
+					const fileContent = new TextEncoder().encode(fileReader.result);
+					
+					const data = {};
+					data["userEmail"] = getCookie("userEmail");
+					data["binData"] = Array.from(fileContent);
+					data["fileName"] = fileName;
+
+					fetch("http://localhost:8080/api/v1/add_file", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+							"AccessToken": getCookie("AccessToken"),
+						},
+						body: JSON.stringify(data),
+					})
+					.then((response) => {
+						if (!response.ok) {
+							throw Error(response.statusText);
+						}
+
+						return response.json();
+					})
+					.then(data => {
+						if (data.includes("already present")) {
+							message.innerHTML = "Adding File: Already Added";
+							message.style.color = "red";
+							return;
+						}
+						message.innerHTML = "Adding File: Success";
+						message.style.color = "green";
+					})
+					.catch(error => {
+						message.innerHTML = "Adding File: Failed";
+						message.style.color = "red";
+					});
+				};
+
+				fileReader.readAsText(file);
+			};
+
+			function submitFormDeleteFile(event) {
+				event.preventDefault();
+
+				document.querySelector('#message.get-all').innerHTML = "";
+				document.querySelector("#file-list").innerHTML = "";
+				document.querySelector('#message.add').innerHTML = "";
+				document.querySelector('#message.get').innerHTML = "";
+				document.querySelector('#get-file-message').innerHTML = "";
+
+				const message = document.querySelector('#message.delete');
+				
+				const data = {};
+				data["userEmail"] = getCookie("userEmail");
+				data["fileSHA512Digest"] = document.querySelector('#file-digest').value;
+
+				fetch("http://localhost:8080/api/v1/delete_file", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						"AccessToken": getCookie("AccessToken"),
+					},
+					body: JSON.stringify(data),
+				})
+				.then((response) => {
+					if (!response.ok) {
+						throw Error(response.statusText);
+					}
+
+					return response.json();
+				})
+				.then(data => {
+					if (!data.includes("was deleted")) {
+						message.innerHTML = "Deleting File: Already Deleted";
+						message.style.color = "red";
+						return;
+					} else {
+						message.innerHTML = "Deleting File: Success";
+						message.style.color = "green";
+					}
+				})
+				.catch(error => {
+					message.innerHTML = "Deleting File: Failed";
+					message.style.color = "red";
+				});
+			};
+
+			function submitFormGetFile(event) {
+				event.preventDefault();
+
+				document.querySelector('#message.add').innerHTML = "";
+				document.querySelector('#message.delete').innerHTML = "";
+				document.querySelector('#message.get-all').innerHTML = "";
+				document.querySelector('#file-list').innerHTML = "";
+				
+				const message = document.querySelector('#message.get');
+
+				message.innerHTML = "";
+				
+				const data = {};
+				data["fileSHA512Digest"] = document.querySelector('#file-digest-get').value;
+				
+				const queryString = Object.keys(data).map(key => key + '=' + data[key]).join('&');
+				const url = `http://localhost:8080/api/v1/file_info?${queryString}`;
+
+				fetch(url, {
+					method: "GET",
+				})
+				.then((response) => {
+					if (!response.ok) {
+						throw Error(response.statusText);
+					}
+
+					return response.json();
+				})
+				.then(data => {
+					const fileName = data["fileName"];
+					const binData = data["binData"];
+
+					const text = new TextDecoder("utf-8").decode(new Uint8Array(binData));
+
+					const fileContent = document.querySelector('#get-file-message');
+					fileContent.innerHTML = `File Name: ${fileName}<br>File Content:<br>${text}`;
+
+					message.innerHTML = "Fetching file: Success";
+					message.style.color = "green";
+				})
+				.catch(err => {
+					document.querySelector('#get-file-message').innerHTML = "";
+					message.innerHTML = "Fetching file: Failed";
+					message.style.color = "red";
+				});
 			};

@@ -222,57 +222,6 @@ html(lang="en")
 				color: #fff;
 				cursor: pointer;
 			}
-
-			@media (max-height: 600px) and (min-width: 600px) {
-				.title {
-					font-size: 16px;
-				}
-
-				.contact {
-					font-size: 10px;
-				}
-
-				.logo {
-					font-size: 40px;
-				}
-
-				.icon {
-					font-size: 10px;
-				}
-
-				.start-container {
-					width: 100%;
-				}
-
-				.start-title {
-					font-size: 12px;
-				}
-
-				.tell-us-more {
-					margin-top: -5px;
-					font-size: 10px;
-				}
-
-				.tell-us-more:before, .tell-us-more:after {
-					display: none;
-				}
-
-				.sign-up-btn {
-					margin-top: 30px;
-					width: 100px;
-					height: 20px;
-					line-height: 20px;
-					font-size: 10px;
-				}
-
-				.login-btn {
-					margin-top: 30px;
-					width: 100px;
-					height: 20px;
-					line-height: 20px;
-					font-size: 10px;
-				}
-			}
 	body
 		.container
 			.left-container

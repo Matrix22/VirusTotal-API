@@ -90,34 +90,6 @@ html
 				transition: all 300ms ease-in-out;
 			}
 
-			.social {
-				width: 80%;
-				position: absolute;
-				bottom: 40px;
-				left: 50%;
-				transform: translate(-50%, 0);
-			}
-
-			.social-btn {
-				display: inline-block;
-				margin-right: 25px;
-			}
-
-			.social-btn .icon {
-				color: #2B7A78;
-				transition: all 300ms ease-in-out;
-				cursor: pointer;
-			}
-
-			.social-title {
-				color: #2B7A78;
-				font-family: 'Montserrat', sans-serif;
-				font-size: 16px;
-				letter-spacing: 1px;
-				margin-top: 10px;
-				transition: all 300ms ease-in-out;
-			}
-
 			.icon:hover {
 				color: #17252A;
 			}
@@ -282,79 +254,26 @@ html
 				font-size: 16px;
 				cursor: pointer;
 				transition: all 300ms ease-in-out;
+				background-color: #FEFFFF;
 			}
 
 			.start-btn:hover {
-				background-color: #2B7A78;
 				color: #fff;
+				background-color: red;
+				border-color: red;
 			}
 
-			@media (max-height: 600px) and (min-width: 600px) {
-				.title {
-					font-size: 16px;
-				}
-
-				.contact {
-					font-size: 10px;
-				}
-
-				.logo {
-					font-size: 40px;
-				}
-
-				.icon {
-					font-size: 10px;
-				}
-
-				.social-title {
-					font-size: 10px;
-					margin-top: 0;
-				}
-
-				.nav-container .input {
-					margin-left: 20px;
-					line-height: 20px;
-					height: 20px;
-				}
-
-				.nav-container input {
-					width: 100px;
-				}
-
-				.nav-container input::placeholder {
-					font-size: 8px;
-				}
-
-				.nav-btn {
-					width: 50px;
-					height: 20px;
-					font-size: 10px;
-					line-height: 20px;
-				}
-
-				.start-container {
-					width: 100%;
-				}
-
-				.start-title {
-					font-size: 12px;
-				}
-
-				.tell-us-more {
-					margin-top: -5px;
-					font-size: 10px;
-				}
-
-				.tell-us-more:before, .tell-us-more:after {
-					display: none;
-				}
+			.nav-btn.log-out:hover {
+				color: #fff;
+				background-color: red;
+				border-color: red;
 			}
 	body
 		.container
 			.left-container
 				.navigation
 					.title Virus Analyzer
-					.contact World without malware
+					.contact #{userEmail}
 				.logo-container
 					.logo
 						img(src="https://i.postimg.cc/JhJrp4zV/logo-no-background.png", width="500px", height="82px")
@@ -368,7 +287,8 @@ html
 				.start-container
 					.start-title For this version of <br>the Virus Analyzer<br> you can add, remove and inspect<br>files and urls
 					.project-container
-						.tell-us-more Try these features by preassing<br>the buttons above
+						.tell-us-more If you want to delete your account<br> press the button below
+						button.start-btn Delete Account
 		
 		:javascript
 			document.querySelector(".nav-btn.log-out").onclick = function() {
@@ -381,4 +301,55 @@ html
 
 			document.querySelector(".nav-btn.file").onclick = function() {
 				location.href = "/home/file";
+			};
+
+			function getCookie(cname) {
+				let name = cname + "=";
+				let decodedCookie = decodeURIComponent(document.cookie);
+				let ca = decodedCookie.split(';');
+
+				for(let i = 0; i <ca.length; i++) {
+					let c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
+				}
+
+				return "";
+			};
+
+			document.querySelector(".start-btn").onclick = function() {
+				event.preventDefault();
+				const url = "http://localhost:8080/api/v1/delete_user";
+				const data = {};
+				data["userEmail"] = getCookie("userEmail");
+				fetch(url, {
+					method: "POST",
+					body: JSON.stringify(data),
+					headers: {
+						"AccessToken": getCookie("AccessToken"),
+						"Content-Type": "application/json",
+					},
+				})
+				.then((response) => {
+					if (!response.ok) {
+						throw Error(response.statusText);
+					}
+
+					return response.json();
+				})
+				.then((data) => {
+					if (!data.hasOwnProperty('statusMessage')) {
+						window.location.replace("/home/logout");
+					} else {
+						throw Error(data.statusMessage);
+					}
+				})
+				.catch((error) => {
+					console.error("Server error:", error);
+				});
 			};

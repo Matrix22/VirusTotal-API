@@ -83,7 +83,8 @@ void homeHandler(HTTPServerRequest req, HTTPServerResponse res) {
         if (accessToken.empty) {
             res.redirect("/login");
         } else {
-            render!("home.dt")(res);
+            auto userEmail = req.cookies().get("userEmail");
+            render!("home.dt", userEmail)(res);
         }
     } else {
         res.redirect("/login");
@@ -97,7 +98,8 @@ void fileHandler(HTTPServerRequest req, HTTPServerResponse res) {
         if (accessToken.empty) {
             res.redirect("/login");
         } else {
-            render!("file.dt")(res);
+            auto userEmail = req.cookies().get("userEmail");
+            render!("file.dt", userEmail)(res);
         }
     } else {
         res.redirect("/login");
@@ -111,7 +113,8 @@ void urlHandler(HTTPServerRequest req, HTTPServerResponse res) {
         if (accessToken.empty) {
             res.redirect("/login");
         } else {
-            render!("url.dt")(res);
+            auto userEmail = req.cookies().get("userEmail");
+            render!("url.dt", userEmail)(res);
         }
     } else {
         res.redirect("/login");
@@ -126,6 +129,7 @@ void logoutHandler(HTTPServerRequest req, HTTPServerResponse res) {
             res.redirect("/");
         } else {
             res.setCookie("AccessToken", null);
+            res.setCookie("userEmail", null);
             res.redirect("/");
         }
     } else {

@@ -133,7 +133,10 @@ override:
         switch (res)
         {
             case DBConnection.UserRet.OK:
-                return ["AccessToken": dbClient.generateUserAccessToken(userEmail)].serializeToJson();
+                return [
+                    "AccessToken": dbClient.generateUserAccessToken(userEmail),
+                    "userEmail": userEmail
+                ].serializeToJson();
 
             case DBConnection.UserRet.ERR_INVALID_EMAIL:
                 throw new HTTPStatusException(
